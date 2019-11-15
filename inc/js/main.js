@@ -1,14 +1,98 @@
 import MegaCalc from './megacalc.js';
 let megaC = new MegaCalc;
 
-let addBtn = document.querySelector("#addAction");
-let subBtn = document.querySelector("#subAction");
-let multBtn = document.querySelector("#multAction");
-let divBtn = document.querySelector("#divAction");
-let expBtn = document.querySelector("#expAction");
-let sqrBtn = document.querySelector("#sqrAction");
-let convBtn = document.querySelector("#convAction");
+let offBtn = document.querySelector("#OFF");
+let mcBtn = document.querySelector("#MC");
+let mrBtn = document.querySelector("#MR");
+let mminusBtn = document.querySelector("#MMINUS");
+let mplusBtn = document.querySelector("#MPLUS");
+let sqrtBtn = document.querySelector("#SQRT");
+let pnmBtn = document.querySelector("#PNM");
+let sevenBtn = document.querySelector("#SEVEN");
+let eightBtn = document.querySelector("#EIGHT");
+let nineBtn = document.querySelector("#NINE");
+let multiplyBtn = document.querySelector("#MULTIPLY");
+let expBtn = document.querySelector("#EXP");
+let ceBtn = document.querySelector("#CE");
+let fourBtn = document.querySelector("#FOUR");
+let fiveBtn = document.querySelector("#FIVE");
+let sixBtn = document.querySelector("#SIX");
+let subtractBtn = document.querySelector("#SUBTRACTION");
+let divideBtn = document.querySelector("#DIVIDE");
+let oncBtn = document.querySelector("#ONC");
+let oneBtn = document.querySelector("#ONE");
+let twoBtn = document.querySelector("#TWO");
+let threeBtn = document.querySelector("#THREE");
+let addBtn = document.querySelector("#PLUS");
+let equalBtn = document.querySelector("#EQUAL");
+let zeroBtn = document.querySelector("#ZERO");
+let decimalBtn = document.querySelector("#DECIMAL");
 
+const mcUpdateDisplay = (megaCalc) => {
+    document.getElementById('display').innerHTML = megaCalc.display;
+};
+
+oneBtn.addEventListener('click', () => {
+    let ans = megaC.number('1');
+    mcUpdateDisplay(ans);
+});
+
+twoBtn.addEventListener('click', () => {
+    let ans = megaC.number('2');
+    mcUpdateDisplay(ans);
+});  
+
+threeBtn.addEventListener('click', () => {
+    let ans = megaC.number('3');
+    mcUpdateDisplay(ans);
+});  
+
+fourBtn.addEventListener('click', () => {
+    let ans = megaC.number('4');
+    mcUpdateDisplay(ans);
+});
+
+fiveBtn.addEventListener('click', () => {
+    let ans = megaC.number('5');
+    mcUpdateDisplay(ans);
+});
+
+sixBtn.addEventListener('click', () => {
+    let ans = megaC.number('6');
+    mcUpdateDisplay(ans);
+});
+
+sevenBtn.addEventListener('click', () => {
+    let ans = megaC.number('7');
+    mcUpdateDisplay(ans);
+});
+
+eightBtn.addEventListener('click', () => {
+    let ans = megaC.number('8');
+    mcUpdateDisplay(ans);
+});
+
+nineBtn.addEventListener('click', () => {
+    let ans = megaC.number('9');
+    mcUpdateDisplay(ans);
+});
+
+zeroBtn.addEventListener('click', () => {
+    let ans = megaC.number('0');
+    mcUpdateDisplay(ans);
+});
+
+decimalBtn.addEventListener('click', () => {
+    let ans = megaC.number('.');
+    mcUpdateDisplay(ans);
+});
+
+addBtn.addEventListener('click', async () => {
+    let num1 = Number(document.getElementById('addInput1').value);
+    let num2 = Number(document.getElementById('addInput2').value);
+    let ans = await megaC.add(num1,num2);
+    document.getElementById('addResult').innerHTML= ans;
+  });
 
 
 function hsCopyPayment(pay) {

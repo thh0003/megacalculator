@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 	<head>
-			<script type="module" src="main.js"></script>
+			<script type="module" src="inc/js/main.js"></script>
 			<meta charset="utf-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 			<meta name="description" content="">
@@ -61,6 +61,7 @@
 					<td colspan="6">
 						<div class="card border-primary mb-3" style="width:400px;height: 75px;">
 							<div class="card-body text-primary">
+								<p id="formula"></p>
 								<h5 id="display" class="card-text">0</h5>	
 							</div>
 						</div>
@@ -70,37 +71,37 @@
 					<td><button type="button" id="OFF" class="btn btn-primary btn-sm">OFF</button></td>
 					<td><button type="button" id="MC" class="btn btn-primary btn-sm">MC</button></td>
 					<td><button type="button" id="MR" class="btn btn-primary btn-sm">MR</button></td>
-					<td><button type="button" id="M-" class="btn btn-primary btn-sm">M-</button></td>
-					<td><button type="button" id="M+" class="btn btn-primary btn-sm">M+</button></td>
+					<td><button type="button" id="MMINUS" class="btn btn-primary btn-sm">M-</button></td>
+					<td><button type="button" id="MPLUS" class="btn btn-primary btn-sm">M+</button></td>
 					<td><button type="button" id="SQRT" class="btn btn-primary btn-sm">SQRT</button></td>
 				</tr>
 				<tr>
 					<td><button type="button" id="PNM" class="btn btn-primary btn-sm">+/-</button></td>
-					<td><button type="button" id="7" class="btn btn-secondary btn-sm">7</button></td>
-					<td><button type="button" id="8" class="btn btn-secondary btn-sm">8</button></td>
-					<td><button type="button" id="9" class="btn btn-secondary btn-sm">9</button></td>
+					<td><button type="button" id="SEVEN" class="btn btn-secondary btn-sm">7</button></td>
+					<td><button type="button" id="EIGHT" class="btn btn-secondary btn-sm">8</button></td>
+					<td><button type="button" id="NINE" class="btn btn-secondary btn-sm">9</button></td>
 					<td><button type="button" id="MULTIPLY" class="btn btn-primary btn-sm">X</button></td>
 					<td><button type="button" id="EXP" class="btn btn-primary btn-sm">X^y</button></td>
 				</tr>
 				<tr>
 					<td><button type="button" id="CE" class="btn btn-warning btn-sm">CE</button></td>
-					<td><button type="button" id="4" class="btn btn-secondary btn-sm">4</button></td>
-					<td><button type="button" id="5" class="btn btn-secondary btn-sm">5</button></td>
-					<td><button type="button" id="6" class="btn btn-secondary btn-sm">6</button></td>
+					<td><button type="button" id="FOUR" class="btn btn-secondary btn-sm">4</button></td>
+					<td><button type="button" id="FIVE" class="btn btn-secondary btn-sm">5</button></td>
+					<td><button type="button" id="SIX" class="btn btn-secondary btn-sm">6</button></td>
 					<td><button type="button" id="SUBTRACTION" class="btn btn-primary btn-sm">-</button></td>
 					<td><button type="button" id="DIVIDE" class="btn btn-primary btn-sm">/</button></td>
 				</tr>						
 				<tr>
 					<td><button type="button" id="ONC" class="btn btn-warning btn-sm">ON/C</button></td>
-					<td><button type="button" id="1" class="btn btn-secondary btn-sm">1</button></td>
-					<td><button type="button" id="2" class="btn btn-secondary btn-sm">2</button></td>
-					<td><button type="button" id="3" class="btn btn-secondary btn-sm">3</button></td>
+					<td><button type="button" id="ONE" class="btn btn-secondary btn-sm">1</button></td>
+					<td><button type="button" id="TWO" class="btn btn-secondary btn-sm">2</button></td>
+					<td><button type="button" id="THREE" class="btn btn-secondary btn-sm">3</button></td>
 					<td><button type="button" id="PLUS" class="btn btn-primary btn-sm">+</button></td>
 					<td><button type="button" id="EQUAL" class="btn btn-primary btn-sm">=</button></td>
 				</tr>
 				<tr>
 					<td></td>
-					<td><button type="button" colspan="2" id="0" class="btn btn-secondary btn-sm">0</button></td>
+					<td><button type="button" colspan="2" id="ZERO" class="btn btn-secondary btn-sm">0</button></td>
 					<td><button type="button" id="DECIMAL" class="btn btn-secondary btn-sm">.</button></td>
 					<td></td>
 					<td></td>
