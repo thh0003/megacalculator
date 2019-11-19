@@ -81,6 +81,7 @@ class MegaCalc {
             this.megaCalc.formula = [];
             this.megaCalc.state = 0;
             this.megaCalc.ACTION = null;
+            this.megaCalc.BASE= "DEC";
             
             return this.megaCalc;
         } catch (error) {
@@ -157,7 +158,6 @@ class MegaCalc {
             let dbParam_1 = JSON.stringify(this.megaCalc);
             console.log("REQUEST JSON: ")
             console.log(dbParam_1);
-            document.getElementById("HS_JSON_SENT1").innerHTML = "JSON SENT1: dbParam: "+ dbParam_1;
 
             let response = await fetch(this.megaCalc.SERVER, {
                 method: 'POST',
@@ -221,6 +221,8 @@ class MegaCalc {
             this.megaCalc.entry = null;
             this.megaCalc.formula = [];
             this.megaCalc.state = 1;
+            this.megaCalc.ACTION = null;
+            this.megaCalc.BASE = "DEC";
             return this.megaCalc;
 
         } catch (error) {
