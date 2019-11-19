@@ -1,430 +1,112 @@
 <?php
-/*
-Very Simple Synchronous PHP API
-*/
-//Data Models Used
-use Hermes\DataModel\CustomerSql;
-use Hermes\DataModel\AddressSql;
-use Hermes\DataModel\PackageSql;
-use Hermes\DataModel\PaymentSql;
-use Hermes\DataModel\ShipmentSql;
+use MegaMath\NumberPlugins\Octal;
+use MegaMath\NumberPlugins\Hex;
+use MegaMath\NumberPlugins\Binary;
+use MegaMath\NumberPlugins\Floating;
+use MegaMath\NumberPlugins\Integer;
 
-//SERVER DEBUG HOUSING KEEPING
+$composer = require __DIR__ . '/MegaMath/vendor/autoload.php';
+
+$math = new MegaMath($composer);
+
+//SERVER DEBUG HOUSE KEEPING
 $DEBUG = true;
 
-if (!isset($HS_RETURN)) {
-    $HS_RETURN = new stdClass();
+if (!isset($MC_RETURN)) {
+    $MC_RETURN = new stdClass();
 }
-$HS_RETURN->DEBUG = $DEBUG;
+
+$MC_RETURN->DEBUG = $DEBUG;
+
+$MC_CONTENT = trim(file_get_contents("php://input"));
+$MC_RESPONSE = json_decode($MC_CONTENT, false);
+$MC_RETURN->formula = $MC_RESPONSE->formula;
+$MC_RETURN->display = $MC_RESPONSE->display;
+$MC_RETURN->entry = $MC_RESPONSE->entry;
+$MC_RETURN->value = $MC_RESPONSE->value;
+$MC_RETURN->memory = $MC_RESPONSE->memory;
+$MC_RETURN->state = $MC_RESPONSE->state;
+$MC_RETURN->DEBUG = $MC_RESPONSE->DEBUG;
+$MC_RETURN->SERVER =$MC_RESPONSE->SERVER;
+$MC_RETURN->ACTION =$MC_RESPONSE->ACTION;
+$MC_RETURN->BASE = $MC_RESPONSE->BASE;
+
 if ($DEBUG){
-    foreach($_POST as $key => $value)
-        {
-            $HS_RETURN->$key = $value;
-            trigger_error("POST Key: ". $key . " Value: ". $value);
-        }
-
-    foreach($_GET as $key => $value)
-        {
-            $HS_RETURN->$key = $value;
-            trigger_error("GET Key: ". $key . " Value: ". $value);
-        }
+    trigger_error("CONTENT: ". $MC_CONTENT);   
+    trigger_error("Display SENT: ". $MC_RESPONSE->display);   
 }
-
-$HS_RESPONSE = json_decode($_POST["x"], false);
-$HS_RETURN->HS_ACTION = $HS_RESPONSE->HS_ACTION;
-$HS_RETURN->HS_CUST_SEARCH = $HS_RESPONSE->HS_CUST_SEARCH;
-$HS_RETURN->HS_OBJECT = $HS_RESPONSE->HS_OBJECT;
-$HS_RETURN->HS_PAGE = $HS_RESPONSE->HS_PAGE;
-$HS_RETURN->HS_CURSOR = $HS_RESPONSE->HS_CURSOR;
-$HS_RETURN->HS_CUST_SORT = $HS_RESPONSE->HS_CUST_SORT;
-$HS_RETURN->HS_COMMIT=$HS_RESPONSE->HS_COMMIT;
-
-$HS_RETURN->HS_ADR_SEARCH = $HS_RESPONSE->HS_ADR_SEARCH;
-$HS_RETURN->HS_ADR_SORT = $HS_RESPONSE->HS_ADR_SORT;
-$HS_RETURN->HS_APAGE = $HS_RESPONSE->HS_APAGE;
-$HS_RETURN->HS_ACURSOR = $HS_RESPONSE->HS_ACURSOR;
-$HS_RETURN->HS_AcustID = $HS_RESPONSE->HS_AcustID;
-
-$HS_RETURN->HS_PAK_SEARCH = $HS_RESPONSE->HS_PAK_SEARCH;
-$HS_RETURN->HS_PAK_SORT = $HS_RESPONSE->HS_PAK_SORT;
-$HS_RETURN->HS_PPAGE = $HS_RESPONSE->HS_PPAGE;
-$HS_RETURN->HS_PCURSOR = $HS_RESPONSE->HS_PCURSOR;
-$HS_RETURN->HS_PcustID = $HS_RESPONSE->HS_PcustID;
-
-$HS_RETURN->HS_PAY_SEARCH = $HS_RESPONSE->HS_PAY_SEARCH;
-$HS_RETURN->HS_PAY_SORT = $HS_RESPONSE->HS_PAY_SORT;
-$HS_RETURN->HS_PMPAGE = $HS_RESPONSE->HS_PMPAGE;
-$HS_RETURN->HS_PMCURSOR = $HS_RESPONSE->HS_PMCURSOR;
-$HS_RETURN->HS_PMcustID = $HS_RESPONSE->HS_PMcustID;
-
-$HS_RETURN->HS_SHIP_SEARCH = $HS_RESPONSE->HS_SHIP_SEARCH;
-$HS_RETURN->HS_SHIP_SORT = $HS_RESPONSE->HS_SHIP_SORT;
-$HS_RETURN->HS_SPAGE = $HS_RESPONSE->HS_SPAGE;
-$HS_RETURN->HS_SCURSOR = $HS_RESPONSE->HS_SCURSOR;
-$HS_RETURN->HS_ScustID = $HS_RESPONSE->HS_ScustID;
-
-$HS_COMMIT=$HS_RESPONSE->HS_COMMIT;
-
 //SERVER RESPONSES
-if ($HS_RESPONSE->HS_ACTION == "LOAD"){
-    if($HS_RESPONSE->HS_OBJECT == "CUSTOMER"){
-        $DAO = new CustomerSql(
-            $GLOBALS['MYSQL_SERVER'],
-            $GLOBALS['MYSQL_USER'],
-            $GLOBALS['MYSQL_PASSWORD'],
-            $GLOBALS['MYSQL_DATABASE'],
-            $GLOBALS['MYSQL_SSL_KEY'],
-            $GLOBALS['MYSQL_SSL_CERT'],
-            $GLOBALS['MYSQL_SSL_CA'],
-            $DEBUG,
-            $HS_COMMIT
-            
-        );
-        $HS_RETURN->HS_CUSTOMERLIST = $DAO->list(5, $HS_RESPONSE->HS_CURSOR, $HS_RESPONSE->HS_PAGE, $HS_RESPONSE->HS_CUST_SORT, $HS_RESPONSE->HS_CUST_SEARCH );
-    } else if ($HS_RESPONSE->HS_OBJECT == "ADDRESS"){
-        $DAO = new AddressSql(
-            $GLOBALS['MYSQL_SERVER'],
-            $GLOBALS['MYSQL_USER'],
-            $GLOBALS['MYSQL_PASSWORD'],
-            $GLOBALS['MYSQL_DATABASE'],
-            $GLOBALS['MYSQL_SSL_KEY'],
-            $GLOBALS['MYSQL_SSL_CERT'],
-            $GLOBALS['MYSQL_SSL_CA'],
-            $DEBUG,
-            $HS_COMMIT
-        );        
-        $HS_RETURN->HS_ADDRESSLIST = $DAO->list(5, $HS_RESPONSE->HS_AcustID, $HS_RESPONSE->HS_ACURSOR, $HS_RESPONSE->HS_APAGE, $HS_RESPONSE->HS_ADR_SORT, $HS_RESPONSE->HS_ADR_SEARCH) ;
-    } else if ($HS_RESPONSE->HS_OBJECT == "PACKAGE"){
-        $DAO = new PackageSql(
-            $GLOBALS['MYSQL_SERVER'],
-            $GLOBALS['MYSQL_USER'],
-            $GLOBALS['MYSQL_PASSWORD'],
-            $GLOBALS['MYSQL_DATABASE'],
-            $GLOBALS['MYSQL_SSL_KEY'],
-            $GLOBALS['MYSQL_SSL_CERT'],
-            $GLOBALS['MYSQL_SSL_CA'],
-            $DEBUG,
-            $HS_COMMIT
-        );        
-        $HS_RETURN->HS_PACKAGELIST = $DAO->list(5, $HS_RESPONSE->HS_PcustID, $HS_RESPONSE->HS_PCURSOR, $HS_RESPONSE->HS_PPAGE, $HS_RESPONSE->HS_PAK_SORT, $HS_RESPONSE->HS_PAK_SEARCH) ;
-    } else if ($HS_RESPONSE->HS_OBJECT == "PAYMENT"){
-        $DAO = new PaymentSql(
-            $GLOBALS['MYSQL_SERVER'],
-            $GLOBALS['MYSQL_USER'],
-            $GLOBALS['MYSQL_PASSWORD'],
-            $GLOBALS['MYSQL_DATABASE'],
-            $GLOBALS['MYSQL_SSL_KEY'],
-            $GLOBALS['MYSQL_SSL_CERT'],
-            $GLOBALS['MYSQL_SSL_CA'],
-            $DEBUG,
-            $HS_COMMIT
-        );        
-        $HS_RETURN->HS_PAYMENTLIST = $DAO->list(5, $HS_RESPONSE->HS_PMcustID, $HS_RESPONSE->HS_PMCURSOR, $HS_RESPONSE->HS_PMPAGE, $HS_RESPONSE->HS_PAY_SORT, $HS_RESPONSE->HS_PAY_SEARCH) ;
-    } else if ($HS_RESPONSE->HS_OBJECT == "SHIPMENT"){
-        $DAO = new ShipmentSql(
-            $GLOBALS['MYSQL_SERVER'],
-            $GLOBALS['MYSQL_USER'],
-            $GLOBALS['MYSQL_PASSWORD'],
-            $GLOBALS['MYSQL_DATABASE'],
-            $GLOBALS['MYSQL_SSL_KEY'],
-            $GLOBALS['MYSQL_SSL_CERT'],
-            $GLOBALS['MYSQL_SSL_CA'],
-            $DEBUG,
-            $HS_COMMIT
-        );        
-        $HS_RETURN->HS_SHIPMENTLIST = $DAO->list(5, $HS_RESPONSE->HS_ScustID, $HS_RESPONSE->HS_SCURSOR, $HS_RESPONSE->HS_SPAGE, $HS_RESPONSE->HS_SHIP_SORT, $HS_RESPONSE->HS_SHIP_SEARCH) ;
-    }
-    
-} else if($HS_RESPONSE->HS_ACTION == "CREATE"){
-    if($HS_RESPONSE->HS_OBJECT == "CUSTOMER"){
-        $newCustomer = (Array) $HS_RESPONSE->HS_CUSTOMER;
-        if ($DEBUG){
-            trigger_error("Customer Array: ". json_encode($newCustomer));   
+if ($MC_RETURN->ACTION == "FORMULA") {
+    $PREVITEM="";
+    $NEXTITEM="";
+    $CURITEM="";
+    $CURVALUE=0;
+    $formLen = sizeof($MC_RETURN->formula);
+    for ($x=0; $x<$formLen; $x++){
+        $PREVITEM=$x==0?[0,0]:$MC_RETURN->formula[$x-1];
+        $NEXTITEM=(($x+1)<$formLen)?$MC_RETURN->formula[$x+1]:[0,0];
+        $CURITEM=$MC_RETURN->formula[$x];
+        $CURVALUE=$x==1?$PREVITEM[0]:$CURVALUE;
+
+        if ($CURITEM[1]==1){
+            switch ($CURITEM[0]){
+                case "ADD":
+                    $CURVALUE = $math->add($CURVALUE,$NEXTITEM[0],'Floating');
+                    break;
+                case "SUBTRACT":
+                    $CURVALUE = $math->subtract($CURVALUE,$NEXTITEM[0],'Floating');
+                    break;
+                case "MULTIPLY":
+                    $CURVALUE = $math->multiply($CURVALUE,$NEXTITEM[0],'Floating');
+                    break;
+                case "DIVIDE":
+                    $CURVALUE = $math->divide($CURVALUE,$NEXTITEM[0],'Floating');
+                    break;                
+                case "SQRT":
+                    $CURVALUE = $math->sqroot($CURVALUE,'Floating');
+                    $MC_RETURN->formula = [[$CURVALUE,0]];
+                    break;                
+                case "POWER":
+                    $CURVALUE = $math->power($CURVALUE,$NEXTITEM[0],'Floating');
+                    break;                
+                case "EQUAL":
+                    $MC_RETURN->formula = [[$CURVALUE,0]];
+                    break;
+                
+            }
         }
-        $DAO = new CustomerSql(
-            $GLOBALS['MYSQL_SERVER'],
-            $GLOBALS['MYSQL_USER'],
-            $GLOBALS['MYSQL_PASSWORD'],
-            $GLOBALS['MYSQL_DATABASE'],
-            $GLOBALS['MYSQL_SSL_KEY'],
-            $GLOBALS['MYSQL_SSL_CERT'],
-            $GLOBALS['MYSQL_SSL_CA'],
-            $DEBUG,
-            $HS_COMMIT
-        );
-        $HS_RETURN->HS_NEWCUSTOMER = $DAO->create($newCustomer);
-        $HS_RETURN->HS_CUSTOMERLIST = $DAO->list(5, $HS_RESPONSE->HS_CURSOR, $HS_RESPONSE->HS_PAGE, $HS_RESPONSE->HS_CUST_SORT, $HS_RESPONSE->HS_CUST_SEARCH );
-    } else if($HS_RESPONSE->HS_OBJECT == "ADDRESS"){
-        $new = (Array) $HS_RESPONSE->HS_ADDRESS;
-        if ($DEBUG){
-            trigger_error("Address Array: ". json_encode($new));   
-        }
-        $DAO = new AddressSql(
-            $GLOBALS['MYSQL_SERVER'],
-            $GLOBALS['MYSQL_USER'],
-            $GLOBALS['MYSQL_PASSWORD'],
-            $GLOBALS['MYSQL_DATABASE'],
-            $GLOBALS['MYSQL_SSL_KEY'],
-            $GLOBALS['MYSQL_SSL_CERT'],
-            $GLOBALS['MYSQL_SSL_CA'],
-            $DEBUG,
-            $HS_COMMIT
-        );
-        $HS_RETURN->HS_NEWADDRESS = $DAO->create($new);
-        $HS_RETURN->HS_ADDRESSLIST = $DAO->list(5, $HS_RESPONSE->HS_AcustID, $HS_RESPONSE->HS_ACURSOR, $HS_RESPONSE->HS_APAGE, $HS_RESPONSE->HS_ADR_SORT, $HS_RESPONSE->HS_ADR_SEARCH) ;
-    } else if($HS_RESPONSE->HS_OBJECT == "PACKAGE"){
-        $new = (Array) $HS_RESPONSE->HS_PACKAGE;
-        if ($DEBUG){
-            trigger_error("Package Array: ". json_encode($new));   
-        }
-        $DAO = new PackageSql(
-            $GLOBALS['MYSQL_SERVER'],
-            $GLOBALS['MYSQL_USER'],
-            $GLOBALS['MYSQL_PASSWORD'],
-            $GLOBALS['MYSQL_DATABASE'],
-            $GLOBALS['MYSQL_SSL_KEY'],
-            $GLOBALS['MYSQL_SSL_CERT'],
-            $GLOBALS['MYSQL_SSL_CA'],
-            $DEBUG,
-            $HS_COMMIT
-        );
-        $HS_RETURN->HS_NEWPACKAGE = $DAO->create($new);
-        $HS_RETURN->HS_PACKAGELIST = $DAO->list(5, $HS_RESPONSE->HS_PcustID, $HS_RESPONSE->HS_PCURSOR, $HS_RESPONSE->HS_PPAGE, $HS_RESPONSE->HS_PAK_SORT, $HS_RESPONSE->HS_PAK_SEARCH) ;
-    } else if($HS_RESPONSE->HS_OBJECT == "PAYMENT"){
-        $new = (Array) $HS_RESPONSE->HS_PAYMENT;
-        if ($DEBUG){
-            trigger_error("PAYMENT Array: ". json_encode($new));   
-        }
-        $DAO = new PaymentSql(
-            $GLOBALS['MYSQL_SERVER'],
-            $GLOBALS['MYSQL_USER'],
-            $GLOBALS['MYSQL_PASSWORD'],
-            $GLOBALS['MYSQL_DATABASE'],
-            $GLOBALS['MYSQL_SSL_KEY'],
-            $GLOBALS['MYSQL_SSL_CERT'],
-            $GLOBALS['MYSQL_SSL_CA'],
-            $DEBUG,
-            $HS_COMMIT
-        );
-        $HS_RETURN->HS_NEWPAYMENT = $DAO->create($new);
-        $HS_RETURN->HS_PAYMENTLIST = $DAO->list(5, $HS_RESPONSE->HS_PMcustID, $HS_RESPONSE->HS_PMCURSOR, $HS_RESPONSE->HS_PMPAGE, $HS_RESPONSE->HS_PAY_SORT, $HS_RESPONSE->HS_PAY_SEARCH) ;
-    } else if($HS_RESPONSE->HS_OBJECT == "SHIPMENT"){
-        $new = (Array) $HS_RESPONSE->HS_SHIPMENT;
-        if ($DEBUG){
-            trigger_error("SHIPMENT Array: ". json_encode($new));   
-        }
-        $DAO = new ShipmentSql(
-            $GLOBALS['MYSQL_SERVER'],
-            $GLOBALS['MYSQL_USER'],
-            $GLOBALS['MYSQL_PASSWORD'],
-            $GLOBALS['MYSQL_DATABASE'],
-            $GLOBALS['MYSQL_SSL_KEY'],
-            $GLOBALS['MYSQL_SSL_CERT'],
-            $GLOBALS['MYSQL_SSL_CA'],
-            $DEBUG,
-            $HS_COMMIT
-        );
-        $HS_RETURN->HS_NEWSHIPMENT = $DAO->create($new);
-        $HS_RETURN->HS_SHIPMENTLIST = $DAO->list(5, $HS_RESPONSE->HS_ScustID, $HS_RESPONSE->HS_SCURSOR, $HS_RESPONSE->HS_SPAGE, $HS_RESPONSE->HS_SHIP_SORT, $HS_RESPONSE->HS_SHIP_SEARCH) ;
-    }
-} else if($HS_RESPONSE->HS_ACTION == "UPDATE"){
-    if($HS_RESPONSE->HS_OBJECT == "CUSTOMER"){
-        $updateCustomer = (Array) $HS_RESPONSE->HS_CUSTOMER;
-        if ($DEBUG){
-            trigger_error("Customer Array: ". json_encode($updateCustomer));   
-        }
-        $DAO = new CustomerSql(
-            $GLOBALS['MYSQL_SERVER'],
-            $GLOBALS['MYSQL_USER'],
-            $GLOBALS['MYSQL_PASSWORD'],
-            $GLOBALS['MYSQL_DATABASE'],
-            $GLOBALS['MYSQL_SSL_KEY'],
-            $GLOBALS['MYSQL_SSL_CERT'],
-            $GLOBALS['MYSQL_SSL_CA'],
-            $DEBUG,
-            $HS_COMMIT
-        );
-        $HS_RETURN->HS_ROWSAFFECTED = $DAO->update($updateCustomer);
-        $HS_RETURN->HS_CUSTOMERLIST = $DAO->list(5, $HS_RESPONSE->HS_CURSOR, $HS_RESPONSE->HS_PAGE, $HS_RESPONSE->HS_CUST_SORT, $HS_RESPONSE->HS_CUST_SEARCH );
-    } else if($HS_RESPONSE->HS_OBJECT == "ADDRESS"){
-        $updateAddress = (Array) $HS_RESPONSE->HS_ADDRESS;
-        if ($DEBUG){
-            trigger_error("Customer Array: ". json_encode($updateAddress));   
-        }
-        $DAO = new AddressSql(
-            $GLOBALS['MYSQL_SERVER'],
-            $GLOBALS['MYSQL_USER'],
-            $GLOBALS['MYSQL_PASSWORD'],
-            $GLOBALS['MYSQL_DATABASE'],
-            $GLOBALS['MYSQL_SSL_KEY'],
-            $GLOBALS['MYSQL_SSL_CERT'],
-            $GLOBALS['MYSQL_SSL_CA'],
-            $DEBUG,
-            $HS_COMMIT
-        );
-        $HS_RETURN->HS_ROWSAFFECTED = $DAO->update($updateAddress);
-        $HS_RETURN->HS_ADDRESSLIST = $DAO->list(5, $HS_RESPONSE->HS_AcustID, $HS_RESPONSE->HS_ACURSOR, $HS_RESPONSE->HS_APAGE, $HS_RESPONSE->HS_ADR_SORT, $HS_RESPONSE->HS_ADR_SEARCH);
-    } else if($HS_RESPONSE->HS_OBJECT == "PACKAGE"){
-        $updatePackage = (Array) $HS_RESPONSE->HS_PACKAGE;
-        if ($DEBUG){
-            trigger_error("Package Array: ". json_encode($updatePackage));   
-        }
-        $DAO = new PackageSql(
-            $GLOBALS['MYSQL_SERVER'],
-            $GLOBALS['MYSQL_USER'],
-            $GLOBALS['MYSQL_PASSWORD'],
-            $GLOBALS['MYSQL_DATABASE'],
-            $GLOBALS['MYSQL_SSL_KEY'],
-            $GLOBALS['MYSQL_SSL_CERT'],
-            $GLOBALS['MYSQL_SSL_CA'],
-            $DEBUG,
-            $HS_COMMIT
-        );
-        $HS_RETURN->HS_ROWSAFFECTED = $DAO->update($updatePackage);
-        $HS_RETURN->HS_PACKAGELIST = $DAO->list(5, $HS_RESPONSE->HS_PcustID, $HS_RESPONSE->HS_PCURSOR, $HS_RESPONSE->HS_PPAGE, $HS_RESPONSE->HS_PAK_SORT, $HS_RESPONSE->HS_PAK_SEARCH) ;
-    } else if($HS_RESPONSE->HS_OBJECT == "PAYMENT"){
-        $updatePayment = (Array) $HS_RESPONSE->HS_PAYMENT;
-        if ($DEBUG){
-            trigger_error("Package Array: ". json_encode($updatePayment));   
-        }
-        $DAO = new PaymentSql(
-            $GLOBALS['MYSQL_SERVER'],
-            $GLOBALS['MYSQL_USER'],
-            $GLOBALS['MYSQL_PASSWORD'],
-            $GLOBALS['MYSQL_DATABASE'],
-            $GLOBALS['MYSQL_SSL_KEY'],
-            $GLOBALS['MYSQL_SSL_CERT'],
-            $GLOBALS['MYSQL_SSL_CA'],
-            $DEBUG,
-            $HS_COMMIT
-        );
-        $HS_RETURN->HS_ROWSAFFECTED = $DAO->update($updatePayment);
-        $HS_RETURN->HS_PAYMENTLIST = $DAO->list(5, $HS_RESPONSE->HS_PMcustID, $HS_RESPONSE->HS_PMCURSOR, $HS_RESPONSE->HS_PMPAGE, $HS_RESPONSE->HS_PAY_SORT, $HS_RESPONSE->HS_PAY_SEARCH) ;
-    } else if($HS_RESPONSE->HS_OBJECT == "SHIPMENT"){
-        $updateShipment = (Array) $HS_RESPONSE->HS_SHIPMENT;
-        if ($DEBUG){
-            trigger_error("Shipment Array: ". json_encode($updateShipment));   
-        }
-        $DAO = new ShipmentSql(
-            $GLOBALS['MYSQL_SERVER'],
-            $GLOBALS['MYSQL_USER'],
-            $GLOBALS['MYSQL_PASSWORD'],
-            $GLOBALS['MYSQL_DATABASE'],
-            $GLOBALS['MYSQL_SSL_KEY'],
-            $GLOBALS['MYSQL_SSL_CERT'],
-            $GLOBALS['MYSQL_SSL_CA'],
-            $DEBUG,
-            $HS_COMMIT
-        );
-        $HS_RETURN->HS_ROWSAFFECTED = $DAO->update($updateShipment);
-        $HS_RETURN->HS_SHIPMENTLIST = $DAO->list(5, $HS_RESPONSE->HS_ScustID, $HS_RESPONSE->HS_SCURSOR, $HS_RESPONSE->HS_SPAGE, $HS_RESPONSE->HS_SHIP_SORT, $HS_RESPONSE->HS_SHIP_SEARCH) ;
+
+        $MC_RETURN->display = $CURVALUE;
+        $MC_RETURN->value = $CURVALUE;
     }
 
-} else if($HS_RESPONSE->HS_ACTION == "DELETE"){
-    trigger_error("I'M STARTING TO DELETE: ");
-    if($HS_RESPONSE->HS_OBJECT == "CUSTOMER"){
-        trigger_error("I'M DELETING CUSTOMERS: ");
-        $DAO = new CustomerSql(
-            $GLOBALS['MYSQL_SERVER'],
-            $GLOBALS['MYSQL_USER'],
-            $GLOBALS['MYSQL_PASSWORD'],
-            $GLOBALS['MYSQL_DATABASE'],
-            $GLOBALS['MYSQL_SSL_KEY'],
-            $GLOBALS['MYSQL_SSL_CERT'],
-            $GLOBALS['MYSQL_SSL_CA'],
-            $DEBUG,
-            $HS_COMMIT
-        );
-        trigger_error("DELETE ID: ". $HS_RESPONSE->HS_DELID);
-        $HS_RETURN->HS_ROWSAFFECTED = $DAO->delete($HS_RESPONSE->HS_DELID);
-        $HS_RETURN->HS_CUSTOMERLIST = $DAO->list(5, $HS_RESPONSE->HS_CURSOR, $HS_RESPONSE->HS_PAGE, $HS_RESPONSE->HS_CUST_SORT, $HS_RESPONSE->HS_CUST_SEARCH );
-    } else if($HS_RESPONSE->HS_OBJECT == "ADDRESS"){
-        if ($DEBUG){
-            trigger_error("Customer Array: ". json_encode($updateAddress));   
-        }
-        $DAO = new AddressSql(
-            $GLOBALS['MYSQL_SERVER'],
-            $GLOBALS['MYSQL_USER'],
-            $GLOBALS['MYSQL_PASSWORD'],
-            $GLOBALS['MYSQL_DATABASE'],
-            $GLOBALS['MYSQL_SSL_KEY'],
-            $GLOBALS['MYSQL_SSL_CERT'],
-            $GLOBALS['MYSQL_SSL_CA'],
-            $DEBUG,
-            $HS_COMMIT
-        );
-        trigger_error("DELETE ID: ". $HS_RESPONSE->HS_ADELID);
-        $HS_RETURN->HS_ROWSAFFECTED = $DAO->delete($HS_RESPONSE->HS_ADELID);
-        $HS_RETURN->HS_ADDRESSLIST = $DAO->list(5, $HS_RESPONSE->HS_AcustID, $HS_RESPONSE->HS_ACURSOR, $HS_RESPONSE->HS_APAGE, $HS_RESPONSE->HS_ADR_SORT, $HS_RESPONSE->HS_ADR_SEARCH);
-    } else if($HS_RESPONSE->HS_OBJECT == "PACKAGE"){
-        $DAO = new PackageSql(
-            $GLOBALS['MYSQL_SERVER'],
-            $GLOBALS['MYSQL_USER'],
-            $GLOBALS['MYSQL_PASSWORD'],
-            $GLOBALS['MYSQL_DATABASE'],
-            $GLOBALS['MYSQL_SSL_KEY'],
-            $GLOBALS['MYSQL_SSL_CERT'],
-            $GLOBALS['MYSQL_SSL_CA'],
-            $DEBUG,
-            $HS_COMMIT
-        );
-        trigger_error("DELETE ID: ". $HS_RESPONSE->HS_PDELID);
-        $HS_RETURN->HS_ROWSAFFECTED = $DAO->delete($HS_RESPONSE->HS_PDELID);
-        $HS_RETURN->HS_PACKAGELIST = $DAO->list(5, $HS_RESPONSE->HS_PcustID, $HS_RESPONSE->HS_PCURSOR, $HS_RESPONSE->HS_PPAGE, $HS_RESPONSE->HS_PAK_SORT, $HS_RESPONSE->HS_PAK_SEARCH) ;
-    } else if($HS_RESPONSE->HS_OBJECT == "PAYMENT"){
-        $DAO = new PaymentSql(
-            $GLOBALS['MYSQL_SERVER'],
-            $GLOBALS['MYSQL_USER'],
-            $GLOBALS['MYSQL_PASSWORD'],
-            $GLOBALS['MYSQL_DATABASE'],
-            $GLOBALS['MYSQL_SSL_KEY'],
-            $GLOBALS['MYSQL_SSL_CERT'],
-            $GLOBALS['MYSQL_SSL_CA'],
-            $DEBUG,
-            $HS_COMMIT
-        );
-        trigger_error("DELETE ID: ". $HS_RESPONSE->HS_PMDELID);
-        $HS_RETURN->HS_ROWSAFFECTED = $DAO->delete($HS_RESPONSE->HS_PMDELID);
-        $HS_RETURN->HS_PAYMENTLIST = $DAO->list(5, $HS_RESPONSE->HS_PMcustID, $HS_RESPONSE->HS_PMCURSOR, $HS_RESPONSE->HS_PMPAGE, $HS_RESPONSE->HS_PAY_SORT, $HS_RESPONSE->HS_PAY_SEARCH) ;
-    } else if($HS_RESPONSE->HS_OBJECT == "SHIPMENT"){
-        $DAO = new ShipmentSql(
-            $GLOBALS['MYSQL_SERVER'],
-            $GLOBALS['MYSQL_USER'],
-            $GLOBALS['MYSQL_PASSWORD'],
-            $GLOBALS['MYSQL_DATABASE'],
-            $GLOBALS['MYSQL_SSL_KEY'],
-            $GLOBALS['MYSQL_SSL_CERT'],
-            $GLOBALS['MYSQL_SSL_CA'],
-            $DEBUG,
-            $HS_COMMIT
-        );
-        trigger_error("DELETE ID: ". $HS_RESPONSE->HS_SDELID);
-        $HS_RETURN->HS_ROWSAFFECTED = $DAO->delete($HS_RESPONSE->HS_SDELID);
-        $HS_RETURN->HS_SHIPMENTLIST = $DAO->list(5, $HS_RESPONSE->HS_ScustID, $HS_RESPONSE->HS_SCURSOR, $HS_RESPONSE->HS_SPAGE, $HS_RESPONSE->HS_SHIP_SORT, $HS_RESPONSE->HS_SHIP_SEARCH) ;
+} elseif ($MC_RETURN->ACTION == "CONVERT"){
+
+    if ($MC_RETURN->value == null) {
+        $modNUM =  $MC_RETURN->entry;
+    } else {
+        $modNUM =  $MC_RETURN->value;
     }
-} else if ($HS_RESPONSE->HS_ACTION == "LOOKUP"){
-    trigger_error("I'M STARTING TO LOOKUP: ");
-    if($HS_RESPONSE->HS_OBJECT == "CUSTOMER"){
-        trigger_error("I'M LOOKING UP CUSTOMERS: ");
-        $DAO = new CustomerSql(
-            $GLOBALS['MYSQL_SERVER'],
-            $GLOBALS['MYSQL_USER'],
-            $GLOBALS['MYSQL_PASSWORD'],
-            $GLOBALS['MYSQL_DATABASE'],
-            $GLOBALS['MYSQL_SSL_KEY'],
-            $GLOBALS['MYSQL_SSL_CERT'],
-            $GLOBALS['MYSQL_SSL_CA'],
-            $DEBUG,
-            $HS_COMMIT
-        );
-        trigger_error("LOOKUP ID: ". $HS_RESPONSE->HS_LOOKUPID);
-        $HS_RETURN->HS_LOOKUP_CUST = $DAO->read($HS_RESPONSE->HS_LOOKUPID);
-    }    
+
+    switch ($MC_RETURN->BASE){
+        case "BIN":
+            $MC_RETURN->display = Binary::fromDec($modNUM);
+            break;
+        case "OCT":
+            $MC_RETURN->display = Octal::fromDec($modNUM);
+            break;
+        case "DEC":
+            $MC_RETURN->display = $modNUM;
+            break;
+        case "HEX":
+            $MC_RETURN->display = Hex::fromDec($modNUM);
+            break;                
+    }
 }
 
 if ($DEBUG){
-    trigger_error("JSON RETURN: ". json_encode($HS_RETURN));   
+    trigger_error("JSON RETURN: ". json_encode($MC_RETURN));   
 }
 
-echo(json_encode($HS_RETURN));
+echo(json_encode($MC_RETURN));
 ?>

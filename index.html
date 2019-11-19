@@ -56,109 +56,67 @@
 		<div class="jumbotron jumbotron-fluid mc-jumbotron">
 			<img src="images/megaman.png" class="rounded float-left" style="width: 200px;" alt="MegaCalculator">
 			<h1>MegaCalculator Blasting Thru Math!</h1>
-			<table class="table table-borderless table-responsive table-light align-middle" style="width: 450px; height: 400px;">
+			<table class="table table-borderless table-responsive table-light align-middle" style="width: 450px;">
 				<tr>
 					<td colspan="6">
-						<div class="card border-primary mb-3" style="width:400px;height: 75px;">
+						<div class="card border-primary mb-3" style="width:400px;height: 100px;">
 							<div class="card-body text-primary">
-								<p id="formula"></p>
+								<p id="formula">0</p>
 								<h5 id="display" class="card-text">0</h5>	
 							</div>
 						</div>
 					</td>
 				</tr>
 				<tr>
-					<td><button type="button" id="OFF" class="btn btn-primary btn-sm">OFF</button></td>
-					<td><button type="button" id="MC" class="btn btn-primary btn-sm">MC</button></td>
-					<td><button type="button" id="MR" class="btn btn-primary btn-sm">MR</button></td>
-					<td><button type="button" id="MMINUS" class="btn btn-primary btn-sm">M-</button></td>
-					<td><button type="button" id="MPLUS" class="btn btn-primary btn-sm">M+</button></td>
-					<td><button type="button" id="SQRT" class="btn btn-primary btn-sm">SQRT</button></td>
+					<td><button type="button" id="OFF" class="btn btn-primary btn-sm" disabled>OFF</button></td>
+					<td><button type="button" id="BIN" class="btn btn-primary btn-sm" disabled>BIN</button></td>
+					<td><button type="button" id="OCT" class="btn btn-primary btn-sm" disabled>OCT</button></td>
+					<td><button type="button" id="DEC" class="btn btn-primary btn-sm" disabled>DEC</button></td>
+					<td><button type="button" id="HEX" class="btn btn-primary btn-sm" disabled>HEX</button></td>
+					<td><button type="button" id="SQRT" class="btn btn-primary btn-sm" disabled>SQRT</button></td>
 				</tr>
 				<tr>
-					<td><button type="button" id="PNM" class="btn btn-primary btn-sm">+/-</button></td>
-					<td><button type="button" id="SEVEN" class="btn btn-secondary btn-sm">7</button></td>
-					<td><button type="button" id="EIGHT" class="btn btn-secondary btn-sm">8</button></td>
-					<td><button type="button" id="NINE" class="btn btn-secondary btn-sm">9</button></td>
-					<td><button type="button" id="MULTIPLY" class="btn btn-primary btn-sm">X</button></td>
-					<td><button type="button" id="EXP" class="btn btn-primary btn-sm">X^y</button></td>
+					<td><button type="button" id="PNM" class="btn btn-primary btn-sm" disabled>+/-</button></td>
+					<td><button type="button" id="SEVEN" class="btn btn-secondary btn-sm" disabled>7</button></td>
+					<td><button type="button" id="EIGHT" class="btn btn-secondary btn-sm" disabled>8</button></td>
+					<td><button type="button" id="NINE" class="btn btn-secondary btn-sm" disabled>9</button></td>
+					<td><button type="button" id="MULTIPLY" class="btn btn-primary btn-sm" disabled>X</button></td>
+					<td><button type="button" id="EXP" class="btn btn-primary btn-sm" disabled>X^y</button></td>
 				</tr>
 				<tr>
-					<td><button type="button" id="CE" class="btn btn-warning btn-sm">CE</button></td>
-					<td><button type="button" id="FOUR" class="btn btn-secondary btn-sm">4</button></td>
-					<td><button type="button" id="FIVE" class="btn btn-secondary btn-sm">5</button></td>
-					<td><button type="button" id="SIX" class="btn btn-secondary btn-sm">6</button></td>
-					<td><button type="button" id="SUBTRACTION" class="btn btn-primary btn-sm">-</button></td>
-					<td><button type="button" id="DIVIDE" class="btn btn-primary btn-sm">/</button></td>
+					<td><button type="button" id="CE" class="btn btn-warning btn-sm" disabled>CE</button></td>
+					<td><button type="button" id="FOUR" class="btn btn-secondary btn-sm" disabled>4</button></td>
+					<td><button type="button" id="FIVE" class="btn btn-secondary btn-sm" disabled>5</button></td>
+					<td><button type="button" id="SIX" class="btn btn-secondary btn-sm" disabled>6</button></td>
+					<td><button type="button" id="SUBTRACTION" class="btn btn-primary btn-sm" disabled>-</button></td>
+					<td><button type="button" id="DIVIDE" class="btn btn-primary btn-sm" disabled>/</button></td>
 				</tr>						
 				<tr>
-					<td><button type="button" id="ONC" class="btn btn-warning btn-sm">ON/C</button></td>
-					<td><button type="button" id="ONE" class="btn btn-secondary btn-sm">1</button></td>
-					<td><button type="button" id="TWO" class="btn btn-secondary btn-sm">2</button></td>
-					<td><button type="button" id="THREE" class="btn btn-secondary btn-sm">3</button></td>
-					<td><button type="button" id="PLUS" class="btn btn-primary btn-sm">+</button></td>
-					<td><button type="button" id="EQUAL" class="btn btn-primary btn-sm">=</button></td>
+					<td><button type="button" id="ONC" class="btn btn-warning btn-sm" >ON/C</button></td>
+					<td><button type="button" id="ONE" class="btn btn-secondary btn-sm" disabled>1</button></td>
+					<td><button type="button" id="TWO" class="btn btn-secondary btn-sm" disabled>2</button></td>
+					<td><button type="button" id="THREE" class="btn btn-secondary btn-sm" disabled>3</button></td>
+					<td><button type="button" id="PLUS" class="btn btn-primary btn-sm" disabled>+</button></td>
+					<td><button type="button" id="EQUAL" class="btn btn-primary btn-sm"disabled>=</button></td>
 				</tr>
 				<tr>
 					<td></td>
-					<td><button type="button" colspan="2" id="ZERO" class="btn btn-secondary btn-sm">0</button></td>
-					<td><button type="button" id="DECIMAL" class="btn btn-secondary btn-sm">.</button></td>
+					<td><button type="button" colspan="2" id="ZERO" class="btn btn-secondary btn-sm" disabled>0</button></td>
+					<td><button type="button" id="DECIMAL" class="btn btn-secondary btn-sm" disabled>.</button></td>
 					<td></td>
 					<td></td>
+				</tr>
+				<tr>
+					<td>Entry:</td>
+					<td colspan="2" id="entry">0</td>
+					<td>Value</td>
+					<td colspan="2" id="value">0</td>
 				</tr>
 			</table>
 		</div>
 	</main>
-	<section id="DEBUG" style="visibility:hidden">
-		<div class="row">
-			<div class="span12">
-				<div class="solid_line"></div>
-			</div>
-		</div>
-		<!-- start: Accordion -->
-		<div class="span12">
-			<div class="accordion" >
-				<div class="accordion-group">
-				<div class="accordion-heading">
-					<a class="accordion-toggle active" data-toggle="collapse" data-parent="#DEBUG" href="#collapseOne">
-								<i class="icon-caret-down"></i> Debug Info Section: 0 </a>
-				</div>
-				<div id="collapseOne" class="accordion-body collapse in">
-					<div class="accordion-inner">
-						<p>DEBUG IS ON</p>
-						<p id="HS_MSG">HS_MSG: </p>
-						<p id="HS_ERR0">HS_ERR0: </p>
-						<p id="HS_ERR1">HS_ERR1: </p>
-					</div>
-				</div>
-				</div>
-				<div class="accordion-group">
-				<div class="accordion-heading">
-					<a class="accordion-toggle" data-toggle="collapse" data-parent="#DEBUG" href="#collapseTwo">
-								<i class="icon-caret-right"></i> Debug Info Section: 1 </a>
-				</div>
-				<div id="collapseTwo" class="accordion-body collapse">
-					<div class="accordion-inner">
-						<p>DEBUG IS ON</p>
-						<p id="HS_JSON_SENT0">JSON SENT0: </p><br>
-						<p id="HS_JSON_SENT1">JSON SENT1: </p><br>
-						<p id="HS_JSON_BOOKS_SENT0">JSON SENT1: </p><br>
-						<p id="HS_JSON_RECEIVED0">JSON RECEIVED0: </p>
-						<p id="HS_JSON_RECEIVED1">JSON RECEIVED1: </p>
-						<p id="HS_JSON_RECEIVED2">JSON RECEIVED2: </p>
-						<p id="HS_JSON_BOOKS_RECEIVE0">JSON BOOKS RECEIVED0: </p>
-						<p id="HS_API_SENT">HS_API_SENT: </p>
-						<p id="HS_BNCLOAD_API_RESPONSE">HS_BNCLOAD_API_RESPONSE: </p>
-						<p id="WAITING">NOT WAITING</p>
-					</div>
-				</div>
-				</div>
-			</div>
-		</div>
-		<!--end: Accordion -->	
-	</section>
 	<footer class="container">
-		<p>&copy; Company 2017-2019</p>
+		<p>MegaCalculator&copy; 2017-2019</p>
 	<script src="inc/js/mc-helper.js"></script>
 	<script src="inc/js/megacalc.js"></script>
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script></footer>
